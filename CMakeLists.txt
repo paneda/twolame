@@ -6,19 +6,23 @@ set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
-set(PROJECT_INCLUDE_DIR
-	${PROJECT_SOURCE_DIR}/include
-)
 
-execute_process(
-    WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
-    COMMAND "./autogen.sh")
+if (CROSS_COMPILE_ARM)
+	execute_process(
+		WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+		COMMAND ./autogen.sh --disable-maintainer-mode --host=arm)
+	execute_process(
+		WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+		COMMAND ./configure --host=arm)
+else()
+	execute_process(
+		WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+		COMMAND ./autogen.sh --disable-maintainer-mode)
+	execute_process(
+		WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+		COMMAND ./configure)
+endif()
 
-execute_process(
-    WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
-    COMMAND "./configure")
-
-include_directories("${PROJECT_INCLUDE_DIR}")
-include_directories("${PROJECT_SOURCE_DIR}")
+include_directories("${PROJECT_SOURCE_DIR}/libtwolame")
 
 add_subdirectory(libtwolame)
