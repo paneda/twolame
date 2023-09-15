@@ -46,7 +46,6 @@ doc/html/doxygen.css
 doc/html/doxygen.png
 doc/html/tabs.css
 
-libtwolame/config.h
 libtwolame/config.h.in
 simplefrontend/stwolame
 frontend/twolame
